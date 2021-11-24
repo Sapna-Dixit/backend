@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <title>Student Registration</title>
+    </head>
+    <body>
+         <nav class="navbar navbar-default fixed-top  text-white">
+            <div class="container">
+                 <a  href= "http://webiwork.com" class = "navbar-brand">Webiwork Technology</a>
+                <div class="navbar-header">
+                    <button type = "button" 
+                    class="navbar-toggle collapsed"
+                    data-target = "#id1"
+                    data-toggle = "collapse"
+                    aria-expanded="false">
+                    <span class="sr-only">Toggle  Navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+               
+
+                </div>
+
+                <div class="collapse  navbar-collapse" id = "id1">
+                    <ul class="nav navbar-nav"> 
+                        <li><a href="#"> Home </a></li>
+                        <li><a href = "/login">Login</a></li>
+                        <li><a href="/register"> Registration</a></li>
+                        
+                    </ul>
+                    
+
+                </div>
+            </div>
+
+        </nav>
+        <header style ="background :url(data:image/jpeg;base64,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);
+        color:white;margin-top:-20px; padding:35px; " >
+            <div class ="conatiner">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="text-center text-white">
+                            <h1>Welcome to MERN Back-End course</h1>
+                            <p>The Best  course on youtube</p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </header>
+
+    </body>
+</html>
