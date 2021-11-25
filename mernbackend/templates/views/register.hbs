@@ -7,21 +7,59 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    
     </head>
     <body>
+        {{>navbar}}
         <div class = "container">
             <div  class = "row">
                 <div class="col-sm-3"></div>
-                <div class="col-sm-9">
-                    <h2>Student Registration Form</h2>
-                    <form class = "form-inline">
-                        <input type = "text" class= "form-control" name = "fname" placeholder = "Your first name"/>
-                        &nbsp;&nbsp;<input type="text" class = "form-control" name = "lname" placeholder = "Your last name"/><br/><br>
-                        <input type = "email" class = "form-control" name="email" placeholder = "Your  email" />
+                <div class="col-sm-6">
+                    <center>
+                    <h3>Student Registration Form</h3><hr/>
+                    <form action="/register" method ="POST">
+                        <div class = "form-group">
+                            <input  type = "text" class="form-control" name = "firstname" id ="fname" placeholder ="Your first name*"/>
+                        </div>
+                       
+                        <div class = "form-group">
+                            <input type = "text" class = "form-control" name = "lastname" id = "lname" placeholder = "Your last name*"/>
+                        </div>
+                       
+                       <div class = "form-group">
+                           <input  type="email" class = "form-control" id ="email" name = "email" placeholder="Your email*"/>
+
+                       </div>
+
+                       <div class = "form-group">
+                           <input  type  ="text" class = "form-control" id="phone" name ="phone" placeholder ="Your phone*"/>
+
+                       </div>
+                       <div class= "form-group">
+                            <input  type  = "text" class ="form-control" id ="age" name ="age" placeholder = "Your age*"/>
+                       </div>
+                       
+                        <div class = "form-group">
+                            <input  type ="password" class ="form-control" name ="password" id ="pwd" placeholder = "Your password*"/>
+                           
+                        </div>
+                        <div class="form-group">
+                             <input  type ="password" class="form-control" name = "confirmpassword" id="cpass" placeholder="Your confirm password*"/>
+                        </div>
+                         <div class="form-check">
+                            <input type = "radio" class="form-check-input" name ="gender" id ="rdm" value ="male"/>
+                            <label for="rdm" class ="form-check-label">male</label>
+                            <input  type = "radio" class ="form-check-input" name = "gender" id ="rdf" value ="female"/>
+                            <label for ="rdf" class ="form-check-label">female</label>
+                            
+                        </div>
+                        <input type="submit" class ="btn btn-primary" value ="Register"/>
                     </form>
+
+                    </center>
                     
                 </div>
-                
+                <div class="col-sm-3"></div>
             </div>
         </div>
     </body>
