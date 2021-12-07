@@ -47,19 +47,22 @@ app.post("/register", async(req, res)=>{
             const pass = req.body.password;
             const cpass = req.body.confirmpassword;
 
-            if(pass===cpass)
+            if(pass === cpass)
             {
                 const registerStudent = new Register({
-                    firstname : req.body.firstname,
-                    lastname  : req.body.lastname,
+                    firstname  : req.body.firstname,
+                    lastname   : req.body.lastname,
                         email  : req.body.email,
                         gender : req.body.gender,
-                        phone   : req.body.phone,
-                          age :  req.body.age,
-                          password :pass,
-                          confirmpassword : cpass
+                        phone  : req.body.phone,
+                          age  : req.body.age,
+                      password : pass,
+               confirmpassword : cpass
 
-                 })
+                 });
+
+                 const token = await registerStudent.generateAuthToken();
+                 console.log("Token ------>",token);
                  const registered = await  registerStudent.save();
                  res.status(201).render("index");
             }
@@ -70,27 +73,30 @@ app.post("/register", async(req, res)=>{
             res.status(400).send(error);
         }
 });
-app.post("/login", async(req, res)=>{
-    try{
-        const email = req.body.email;
-        const password = req.body.password;
+
+
+
+// app.post("/login", async(req, res)=>{
+//     try{
+//         const email = req.body.email;
+//         const password = req.body.password;
    
-       const useremail = await Register.findOne({email:email});
-    //    res.send(useremail.password);
-    //    console.log(useremail);
+//        const useremail = await Register.findOne({email:email});
+//     //    res.send(useremail.password);
+//     //    console.log(useremail);
    
-       if(useremail.pass === password)
-       {
-           res.status(201).render("index");
-       }else{
-           res.status(400).send("incorrect email or password");
-       }
+//        if(useremail.pass === password)
+//        {
+//            res.status(201).render("index");
+//        }else{
+//            res.status(400).send("incorrect email or password");
+//        }
    
-    }catch(error)
-    {
-        res.status(400).send("Invalid login details");
-    }
-});
+//     }catch(error)
+//     {
+//         res.status(400).send("Invalid login details");
+//     }
+// });
 
 // const bcrypt  = require("bcryptjs");
 // const securePassword = async(password)=>{
@@ -106,7 +112,20 @@ app.post("/login", async(req, res)=>{
 
 // securePassword("mongo@123");
 
+const jwt = require("jsonwebtoken");
 
+const createToken  = async()=>{
+  const token = await  jwt.sign({_id :"619f4ceac8aeef21e0b15b2c"},"studentregistrationwebtoken",
+  {
+      expiresIn : "2 second"
+  });
+    console.log(token);
+
+    const userVer = await jwt.verify(token, "studentregistrationwebtoken");
+    console.log(userVer);
+
+};
+createToken();
 app.listen(port, ()=>{
     console.log(`server is running at port no ${port}`);
 })
