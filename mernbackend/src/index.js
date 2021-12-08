@@ -8,6 +8,7 @@ const {json}   = require("express");
 
 const hbs = require("hbs");
 const port  = process.env.PORT || 8000;
+const cookieParser = require("cookie-parser");
 
 const static_path = path.join(__dirname,"../public");
 const template_path = path.join(__dirname, "../templates/views");
@@ -17,8 +18,10 @@ const partials_path  = path.join(__dirname, "../templates/partials")
 //console.log(path.join(__dirname,"../public"))
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({extended:false}));
 app.use(express.static(static_path));
+
 app.set("view engine","hbs");
 app.set("views",template_path);
 
@@ -71,6 +74,14 @@ app.post("/register", async(req, res)=>{
                  console.log("The success part------> "+registerStudent);
                  const token = await registerStudent.generateAuthToken();
                  console.log("the token part ------>",token);
+
+                 res.cookie("jwt", token, {
+                     expires : new Date(Date.now()+30000),
+                     httpOnly : true,
+                 });
+
+                 console.log(`this is the cookie : ${req.cookie.jwt}`)
+                 console.log("Cookie =====>  "+cookie);
                  const registered = await  registerStudent.save();
                  res.status(201).render("index");
             }
@@ -96,6 +107,11 @@ app.post("/login", async(req, res)=>{
     const token = await useremail.generateAuthToken();
     console.log("the token part ------>",token);
 
+    res.cookie("jwt_token", token, {
+        expires : new Date(Date.now() +40000),
+        httpOnly : true,
+        //secure : true
+    });
 
        if(useremail.pass === password)
        {
@@ -104,7 +120,8 @@ app.post("/login", async(req, res)=>{
            res.status(400).send("incorrect email or password");
        }
       
-
+      
+   
     }catch(error)
     {
         res.status(400).send("Invalid login details");
