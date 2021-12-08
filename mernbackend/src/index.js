@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const path = require("path");
 const app   = express();
@@ -6,11 +7,13 @@ const Register = require("./models/registers");
 const {json}   = require("express");
 
 const hbs = require("hbs");
-const port  = process.env.PORT || 3000;
+const port  = process.env.PORT || 8000;
 
 const static_path = path.join(__dirname,"../public");
 const template_path = path.join(__dirname, "../templates/views");
 const partials_path  = path.join(__dirname, "../templates/partials")
+
+// console.log(path.join(__dirname, "../templates/views"));
 //console.log(path.join(__dirname,"../public"))
 
 app.use(express.json());
@@ -24,6 +27,10 @@ hbs.registerPartials(partials_path);
 // view engine setup
 app.set('views', template_path);
 app.set('view engine', 'hbs');
+
+console.log(process.env.SECRET_KEY)
+
+
 
 app.get("/", (req, res)=>{
     //res.send("Hello!! User")
@@ -61,8 +68,9 @@ app.post("/register", async(req, res)=>{
 
                  });
 
+                 console.log("The success part------> "+registerStudent);
                  const token = await registerStudent.generateAuthToken();
-                 console.log("Token ------>",token);
+                 console.log("the token part ------>",token);
                  const registered = await  registerStudent.save();
                  res.status(201).render("index");
             }
@@ -75,28 +83,33 @@ app.post("/register", async(req, res)=>{
 });
 
 
+//login api
+app.post("/login", async(req, res)=>{
+    try{
+        const email = req.body.email;
+        const password = req.body.password;
+   
+       const useremail = await Register.findOne({email:email});
+    //    res.send(useremail.password);
+    //    console.log(useremail);
+   
+    const token = await useremail.generateAuthToken();
+    console.log("the token part ------>",token);
 
-// app.post("/login", async(req, res)=>{
-//     try{
-//         const email = req.body.email;
-//         const password = req.body.password;
-   
-//        const useremail = await Register.findOne({email:email});
-//     //    res.send(useremail.password);
-//     //    console.log(useremail);
-   
-//        if(useremail.pass === password)
-//        {
-//            res.status(201).render("index");
-//        }else{
-//            res.status(400).send("incorrect email or password");
-//        }
-   
-//     }catch(error)
-//     {
-//         res.status(400).send("Invalid login details");
-//     }
-// });
+
+       if(useremail.pass === password)
+       {
+           res.status(201).render("index");
+       }else{
+           res.status(400).send("incorrect email or password");
+       }
+      
+
+    }catch(error)
+    {
+        res.status(400).send("Invalid login details");
+    }
+});
 
 // const bcrypt  = require("bcryptjs");
 // const securePassword = async(password)=>{
@@ -112,20 +125,20 @@ app.post("/register", async(req, res)=>{
 
 // securePassword("mongo@123");
 
-const jwt = require("jsonwebtoken");
+// const jwt = require("jsonwebtoken");
 
-const createToken  = async()=>{
-  const token = await  jwt.sign({_id :"619f4ceac8aeef21e0b15b2c"},"studentregistrationwebtoken",
-  {
-      expiresIn : "2 second"
-  });
-    console.log(token);
+// const createToken  = async()=>{
+//   const token = await  jwt.sign({_id :"619f4ceac8aeef21e0b15b2c"},"studentregistrationwebtoken",
+//   {
+//       expiresIn : "2 second"
+//   });
+//     console.log(token);
 
-    const userVer = await jwt.verify(token, "studentregistrationwebtoken");
-    console.log(userVer);
+//     const userVer = await jwt.verify(token, "studentregistrationwebtoken");
+//     console.log(userVer);
 
-};
-createToken();
+// };
+// createToken();
 app.listen(port, ()=>{
     console.log(`server is running at port no ${port}`);
 })

@@ -36,15 +36,26 @@ const studentSchema =  new mongoose.Schema({
     confirmpassword :{
         type :String,
         required : true
-    }
+    },
+    tokens :[{
+        token :[{
+            type :String,
+            required : true
+        }]
+    }]
 });
 
 //Generating tokens
 studentSchema.methods.generateAuthToken = async function(){
     try {   
-          const token = await jwt.sign({_id:this._id},"studentregistrationjsonwebtoken")
-        
+        console.log(this._id)
+          const token = await jwt.sign({_id:this._id.toString()}, process.env.SECRET_KEY);
+          this.tokens = this.tokens.concat({token : token});
+          await this.save();
+        console.log(token);
+        return token;
     } catch (error) {
+        res.send("the error part..!!")
         
     }
 }
@@ -58,7 +69,7 @@ studentSchema.pre("save", async function(next){
        
         console.log(`the current password ${this.password}`);
         this.password = await bcrypt.hash(this.password,10);
-        console.log(`the current password ${this.password}`);
+      //  console.log(`the current password ${this.password}`);
     }
 
     next();
