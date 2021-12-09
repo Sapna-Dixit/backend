@@ -5,6 +5,7 @@ const app   = express();
 require("./db/ conn");
 const Register = require("./models/registers");
 const {json}   = require("express");
+const auth     = require("./middleware/auth") 
 
 const hbs = require("hbs");
 const port  = process.env.PORT || 8000;
@@ -39,6 +40,35 @@ app.get("/", (req, res)=>{
     //res.send("Hello!! User")
     res.render("index");
 });
+
+app.get("/secret", auth, (req, res)=>{
+   
+        // console.log(`this is the cookie : ${req.cookies.jwt}`);
+       
+         res.render("secret");
+});
+
+app.get("/logout", auth, async(req, res)=>{
+    try{
+            console.log(req.user);
+
+           req.user.tokens = req.user.tokens.filter((currElement)=>{
+               return currElement.token != req.token;
+           })
+
+            res.clearCookie("jwt");
+
+            console.log("logout successfully...!!!");
+            req.user.save();
+             res.render("login")
+
+    }
+    catch(err)
+    {
+        res.status(500).send(err);
+    }
+
+})
 
 app.get("/register", (req, res)=>{
     res.render("register")
@@ -80,8 +110,8 @@ app.post("/register", async(req, res)=>{
                      httpOnly : true,
                  });
 
-                 console.log(`this is the cookie : ${req.cookie.jwt}`)
-                 console.log("Cookie =====>  "+cookie);
+                 console.log(`this is the cookie : ${req.cookies.jwt}`)
+              //   console.log("Cookie =====>  "+cookie);
                  const registered = await  registerStudent.save();
                  res.status(201).render("index");
             }
@@ -107,11 +137,13 @@ app.post("/login", async(req, res)=>{
     const token = await useremail.generateAuthToken();
     console.log("the token part ------>",token);
 
-    res.cookie("jwt_token", token, {
-        expires : new Date(Date.now() +40000),
+    res.cookie("jwt", token, {
+        expires : new Date(Date.now() + 4000),
         httpOnly : true,
         //secure : true
     });
+
+   
 
        if(useremail.pass === password)
        {
